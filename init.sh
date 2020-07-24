@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ $(id -u) -ne 0 ]
+    then echo "Please run this as root or with root priviledges"
+    exit
+fi
+
 echo '######################################################################'
 echo '# Provide provisioning parameters for this system. Enter <Ctrl-C> to #'
 echo '# restart the process.                                               #'
