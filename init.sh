@@ -1,8 +1,15 @@
 #!/bin/bash
 
+# Check for root; If not root, nothing can be done.
 if [ $(id -u) -ne 0 ]
     then echo "Please run this as root or with root priviledges"
     exit
+fi
+
+# Install 'yq', needed for editing network configuration.
+if ! snap list yq 2>/dev/null | grep -q yq; then
+    echo "Packege 'yq' not found. Installing..."
+    snap install yq
 fi
 
 echo '######################################################################'
