@@ -22,5 +22,19 @@ read -p 'Enter IP address: ' ipaddress
 read -p 'Enter subnet maks: ' subnetmask
 read -p 'Enter default gateway: ' defaultgateway
 
+printf 'Updating /etc/hostname... '
 echo $hostname > /etc/hostname
+echo 'done'
+
+printf 'Updating /etc/hosts... '
 sed -i "s/^127.0.1.1.*$/127.0.1.1 $hostname/" /etc/hosts
+echo 'done'
+
+printf 'Updating active hostname... '
+hostnamectl set-hostname $hostname
+echo 'done'
+
+printf 'Deleting and regenerating SSH host keys... '
+rm /etc/ssh/ssh_host_*
+dpkg-reconfigure openssh-server 1>/dev/null 2>/dev/null
+echo 'done'
