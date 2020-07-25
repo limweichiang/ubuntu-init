@@ -24,17 +24,47 @@ read -p 'Enter default gateway: ' defaultgateway
 
 printf 'Updating /etc/hostname... '
 echo $hostname > /etc/hostname
-echo 'done'
+if [ $? -ne 0 ]
+then
+   echo 'failed'
+   exit
+else
+   echo 'done'
+fi
 
 printf 'Updating /etc/hosts... '
 sed -i "s/^127.0.1.1.*$/127.0.1.1 $hostname/" /etc/hosts
-echo 'done'
+if [ $? -ne 0 ]
+then
+   echo 'failed'
+   exit
+else
+   echo 'done'
+fi
 
 printf 'Updating active hostname... '
 hostnamectl set-hostname $hostname
-echo 'done'
+if [ $? -ne 0 ]
+then
+   echo 'failed'
+   exit
+else
+   echo 'done'
+fi
 
 printf 'Deleting and regenerating SSH host keys... '
 rm /etc/ssh/ssh_host_*
-dpkg-reconfigure openssh-server 1>/dev/null 2>/dev/null
-echo 'done'
+if [ $? -ne 0 ]
+then
+   echo 'failed deleting old SSH keys'
+   exit
+fi
+dpkg-reconfigure openssh-server 1>/dev/null 2>/dev/nulli
+if [ $? -ne 0 ]
+then
+   echo 'failed generating new SSH keys'
+   exit
+else
+   echo 'done'
+fi
+
